@@ -1,4 +1,4 @@
-jsximport IBCtool from './IBCtool.jsx'
+import IBCtool from './IBCtool.jsx'
 
 export default function App() {
   console.log('App is rendering!')
