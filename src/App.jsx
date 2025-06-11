@@ -1,5 +1,5 @@
-import IBCalculator from './IBCalculator.jsx'
+import IBCtool from './IBCtool.jsx'
 
 export default function App() {
-  return <IBCalculator />
+  return <IBCtool />
 }
