@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const IBCalculator = () => {
+const IBCtool = () => {
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState(null);
   const [operation, setOperation] = useState(null);
@@ -1236,4 +1236,4 @@ const IBCalculator = () => {
   );
 };
 
-export default IBCalculator;
+export default IBCtool;
