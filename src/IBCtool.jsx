@@ -233,9 +233,8 @@ const IBCtool = () => {
   const Button = ({ onClick, className = '', children, variant = 'default', size = 'normal', disabled = false }) => {
     const baseClasses = 'font-semibold rounded-lg transition-all duration-200 active:scale-95 shadow-sm border select-none';
     
-    // Improved mobile-first responsive sizing
     const sizes = {
-      normal: 'h-12 md:h-14 text-sm md:text-base px-3 md:px-4 min-w-0', // Larger buttons on mobile
+      normal: 'h-12 md:h-14 text-sm md:text-base px-3 md:px-4 min-w-0',
       small: 'h-10 md:h-12 text-xs md:text-sm px-2 md:px-3 min-w-0',
       large: 'h-14 md:h-16 text-base md:text-lg px-4 md:px-5 min-w-0'
     };
@@ -280,7 +279,7 @@ const IBCtool = () => {
         : 'bg-white border-gray-200'
     } min-h-screen md:min-h-0`}>
       
-      {/* Header - Improved mobile layout */}
+      {/* Header */}
       <div className="text-center mb-3 md:mb-6">
         <div className="flex items-center justify-between mb-2 md:mb-4">
           <Button
@@ -313,7 +312,7 @@ const IBCtool = () => {
         </p>
       </div>
 
-      {/* Tutorial Modal - Better mobile positioning */}
+      {/* Tutorial Modal */}
       {showTutorial && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className={`w-full max-w-md max-h-[80vh] overflow-y-auto rounded-lg shadow-xl ${
@@ -346,7 +345,7 @@ const IBCtool = () => {
         </div>
       )}
 
-      {/* Tab Navigation - Improved mobile design */}
+      {/* Tab Navigation */}
       <div className={`flex rounded-xl mb-3 md:mb-6 border overflow-hidden ${
         isDarkMode ? 'border-gray-600' : 'border-gray-200'
       }`}>
@@ -381,7 +380,7 @@ const IBCtool = () => {
         ))}
       </div>
 
-      {/* Display - Improved mobile sizing */}
+      {/* Display */}
       <div className="mb-3 md:mb-6">
         <div className={`p-3 md:p-6 rounded-xl mb-2 md:mb-4 border transition-all duration-300 ${
           isDarkMode 
@@ -423,7 +422,7 @@ const IBCtool = () => {
           </div>
         )}
 
-        {/* Compact History for mobile */}
+        {/* History */}
         {history.length > 0 && (
           <div className={`p-2 md:p-3 rounded-lg max-h-20 md:max-h-32 overflow-y-auto border transition-all duration-300 ${
             isDarkMode 
@@ -456,13 +455,334 @@ const IBCtool = () => {
         )}
       </div>
 
-      {/* Tab-specific function panels - Compact for mobile */}
+      {/* Tab-specific function panels */}
       {activeTab === 'models' && mode === 'dcf' && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2 mb-2 md:mb-4">
           <Button variant="ib" size="small" onClick={calculateDCF}>DCF Model</Button>
           <Button variant="memory" size="small" onClick={() => storeMemory('wacc')}>Set WACC</Button>
           <Button variant="memory" size="small" onClick={() => storeMemory('terminalGrowth')}>Set TG</Button>
           <Button variant="memory" size="small" onClick={() => storeMemory('enterprise')}>Set EV</Button>
+        </div>
+      )}
+
+      {activeTab === 'models' && mode === 'comps' && (
+        <div className="mb-2 md:mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-1 md:gap-2 mb-2">
+            <Button variant="ib" size="small" onClick={() => {
+              const value = parseFloat(display);
+              const result = memory.enterprise / value;
+              setDisplay(String(result.toFixed(2)));
+              setHistory(prev => [`EV/EBITDA: ${formatNumber(memory.enterprise)} / ${formatNumber(value)} = ${result.toFixed(1)}x`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>EV/EBITDA</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const value = parseFloat(display);
+              const result = memory.marketCap / value;
+              setDisplay(String(result.toFixed(2)));
+              setHistory(prev => [`P/E: ${formatNumber(memory.marketCap)} / ${formatNumber(value)} = ${result.toFixed(1)}x`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>P/E</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const value = parseFloat(display);
+              const result = memory.enterprise / value;
+              setDisplay(String(result.toFixed(2)));
+              setHistory(prev => [`EV/Revenue: ${formatNumber(memory.enterprise)} / ${formatNumber(value)} = ${result.toFixed(1)}x`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>EV/Rev</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const value = parseFloat(display);
+              const result = memory.marketCap / value;
+              setDisplay(String(result.toFixed(2)));
+              setHistory(prev => [`P/B: ${formatNumber(memory.marketCap)} / ${formatNumber(value)} = ${result.toFixed(1)}x`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>P/B</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const value = parseFloat(display);
+              const result = memory.enterprise / value;
+              setDisplay(String(result.toFixed(2)));
+              setHistory(prev => [`EV/Sales: ${formatNumber(memory.enterprise)} / ${formatNumber(value)} = ${result.toFixed(1)}x`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>EV/Sales</Button>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-1 md:gap-2">
+            <Button variant="memory" size="small" onClick={() => storeMemory('enterprise')}>Set EV</Button>
+            <Button variant="memory" size="small" onClick={() => storeMemory('marketCap')}>Set MCap</Button>
+            <Button variant="memory" size="small" onClick={() => storeMemory('revenue')}>Set Rev</Button>
+            <Button variant="memory" size="small" onClick={() => storeMemory('ebitda')}>Set EBITDA</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setDisplay(String(memory.enterprise));
+              setWaitingForOperand(true);
+            }}>Rcl EV</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setDisplay(String(memory.marketCap));
+              setWaitingForOperand(true);
+            }}>Rcl MCap</Button>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'models' && mode === 'lbo' && (
+        <div className="mb-2 md:mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2 mb-2">
+            <Button variant="ib" size="small" onClick={() => {
+              const equity = parseFloat(display);
+              const debt = equity * memory.debtEquityRatio;
+              const totalSize = equity + debt;
+              setDisplay(String(totalSize.toFixed(0)));
+              setHistory(prev => [`LBO Size: ${formatNumber(equity)} equity + ${formatNumber(debt)} debt = ${formatNumber(totalSize)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>LBO Size</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const ebitda = parseFloat(display);
+              const maxDebt = ebitda * memory.debtEbitdaMultiple;
+              setDisplay(String(maxDebt.toFixed(0)));
+              setHistory(prev => [`Debt Cap: ${formatNumber(ebitda)} × ${memory.debtEbitdaMultiple}x = ${formatNumber(maxDebt)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>Debt Cap</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const exitValue = parseFloat(display);
+              const investment = memory.initialInvestment || 100000000;
+              const years = 5;
+              const irr = Math.pow(exitValue / investment, 1/years) - 1;
+              setDisplay(String((irr * 100).toFixed(1)));
+              setHistory(prev => [`IRR: (${formatNumber(exitValue)} / ${formatNumber(investment)})^(1/${years}) - 1 = ${(irr * 100).toFixed(1)}%`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>IRR</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const exitValue = parseFloat(display);
+              const investment = memory.initialInvestment || 100000000;
+              const moic = exitValue / investment;
+              setDisplay(String(moic.toFixed(2)));
+              setHistory(prev => [`MOIC: ${formatNumber(exitValue)} / ${formatNumber(investment)} = ${moic.toFixed(2)}x`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>MOIC</Button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
+            <Button variant="memory" size="small" onClick={() => storeMemory('initialInvestment')}>Set Invest</Button>
+            <Button variant="memory" size="small" onClick={() => storeMemory('debtEquityRatio')}>Set D/E</Button>
+            <Button variant="memory" size="small" onClick={() => storeMemory('debtEbitdaMultiple')}>Set D/EBITDA</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setDisplay(String(memory.initialInvestment));
+              setWaitingForOperand(true);
+            }}>Rcl Invest</Button>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'models' && mode === 'irr_npv' && (
+        <div className="mb-2 md:mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2 mb-2">
+            <Button variant="ib" size="small" onClick={() => {
+              const totalCF = memory.cashFlows.reduce((sum, cf) => sum + cf, 0);
+              let npv = -memory.initialInvestment;
+              memory.cashFlows.forEach((cf, index) => {
+                npv += cf / Math.pow(1 + memory.discountRate / 100, index + 1);
+              });
+              setDisplay(String(Math.round(npv)));
+              setHistory(prev => [`NPV: -${formatNumber(memory.initialInvestment)} + PV(${formatNumber(totalCF)}) = ${formatNumber(npv)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>NPV</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              if (memory.cashFlows.length === 0) return;
+              let irr = 0.1;
+              for (let i = 0; i < 100; i++) {
+                let npv = -memory.initialInvestment;
+                memory.cashFlows.forEach((cf, index) => {
+                  npv += cf / Math.pow(1 + irr, index + 1);
+                });
+                if (Math.abs(npv) < 1) break;
+                irr += npv > 0 ? 0.001 : -0.001;
+              }
+              setDisplay(String((irr * 100).toFixed(2)));
+              setHistory(prev => [`IRR: ${(irr * 100).toFixed(2)}%`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>IRR</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              let payback = 0;
+              let cumulative = -memory.initialInvestment;
+              for (let i = 0; i < memory.cashFlows.length; i++) {
+                cumulative += memory.cashFlows[i];
+                if (cumulative >= 0) {
+                  payback = i + 1 - (cumulative - memory.cashFlows[i]) / memory.cashFlows[i];
+                  break;
+                }
+              }
+              setDisplay(String(payback.toFixed(2)));
+              setHistory(prev => [`Payback: ${payback.toFixed(2)} years`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>Payback</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const currentCF = parseFloat(display);
+              setMemory(prev => ({ ...prev, cashFlows: [...prev.cashFlows, currentCF] }));
+              setHistory(prev => [`Added CF Year ${memory.cashFlows.length + 1}: ${formatNumber(currentCF)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>Add CF</Button>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-1 md:gap-2">
+            <Button variant="memory" size="small" onClick={() => storeMemory('initialInvestment')}>Set Invest</Button>
+            <Button variant="memory" size="small" onClick={() => storeMemory('discountRate')}>Set Rate</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setMemory(prev => ({ ...prev, cashFlows: [] }));
+              setHistory(prev => [`Cleared all cash flows`, ...prev.slice(0, 19)]);
+            }}>Clear CF</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setDisplay(String(memory.initialInvestment));
+              setWaitingForOperand(true);
+            }}>Rcl Invest</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setDisplay(String(memory.discountRate));
+              setWaitingForOperand(true);
+            }}>Rcl Rate</Button>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'scientific' && (
+        <div className="mb-2 md:mb-4">
+          {/* Memory and Advanced Functions Row */}
+          <div className="grid grid-cols-6 gap-1 md:gap-2 mb-2">
+            <Button variant="function" size="small" onClick={() => {
+              if (display.includes('(')) {
+                setDisplay(display + ')');
+                setOpenParentheses(Math.max(0, openParentheses - 1));
+              } else {
+                setDisplay(display + '(');
+                setOpenParentheses(openParentheses + 1);
+              }
+            }}>()</Button>
+            <Button variant="clear" size="small" onClick={() => setMemory(prev => ({ ...prev, revenue: 0 }))}>mc</Button>
+            <Button variant="memory" size="small" onClick={() => storeMemory('revenue')}>m+</Button>
+            <Button variant="memory" size="small" onClick={() => {
+              const current = parseFloat(display);
+              setMemory(prev => ({ ...prev, revenue: prev.revenue - current }));
+              setHistory(prev => [`M- ${formatNumber(current)}`, ...prev.slice(0, 19)]);
+            }}>m-</Button>
+            <Button variant="memory" size="small" onClick={() => {
+              setDisplay(String(memory.revenue || 0));
+              setWaitingForOperand(true);
+            }}>mr</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setDisplay(String(Math.PI));
+              setHistory(prev => [`π = ${Math.PI.toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>π</Button>
+          </div>
+
+          {/* Power and Root Functions Row */}
+          <div className="grid grid-cols-6 gap-1 md:gap-2 mb-2">
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.pow(val, 2)));
+              setHistory(prev => [`${formatNumber(val)}² = ${formatNumber(Math.pow(val, 2))}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>x²</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.pow(val, 3)));
+              setHistory(prev => [`${formatNumber(val)}³ = ${formatNumber(Math.pow(val, 3))}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>x³</Button>
+            <Button variant="function" size="small" onClick={() => performOperation('^')}>xʸ</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.exp(val)));
+              setHistory(prev => [`e^${formatNumber(val)} = ${formatNumber(Math.exp(val))}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>eˣ</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.pow(10, val)));
+              setHistory(prev => [`10^${formatNumber(val)} = ${formatNumber(Math.pow(10, val))}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>10ˣ</Button>
+            <Button variant="function" size="small" onClick={() => {
+              setDisplay(String(Math.E));
+              setHistory(prev => [`e = ${Math.E.toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>e</Button>
+          </div>
+
+          {/* Reciprocal and Root Functions Row */}
+          <div className="grid grid-cols-6 gap-1 md:gap-2 mb-2">
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(1 / val));
+              setHistory(prev => [`1/${formatNumber(val)} = ${(1/val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>1/x</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.sqrt(val)));
+              setHistory(prev => [`√${formatNumber(val)} = ${Math.sqrt(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>√x</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.cbrt(val)));
+              setHistory(prev => [`∛${formatNumber(val)} = ${Math.cbrt(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>∛x</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.log(val)));
+              setHistory(prev => [`ln(${formatNumber(val)}) = ${Math.log(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>ln</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.log10(val)));
+              setHistory(prev => [`log₁₀(${formatNumber(val)}) = ${Math.log10(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>log</Button>
+            <Button variant="function" size="small" onClick={() => {
+              const val = parseFloat(display);
+              const factorial = (n) => n <= 1 ? 1 : n * factorial(n - 1);
+              const result = factorial(Math.floor(val));
+              setDisplay(String(result));
+              setHistory(prev => [`${Math.floor(val)}! = ${formatNumber(result)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>x!</Button>
+          </div>
+
+          {/* Trigonometric Functions Row */}
+          <div className="grid grid-cols-6 gap-1 md:gap-2 mb-2">
+            <Button variant="ib" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.sin(val)));
+              setHistory(prev => [`sin(${formatNumber(val)}) = ${Math.sin(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>sin</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.cos(val)));
+              setHistory(prev => [`cos(${formatNumber(val)}) = ${Math.cos(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>cos</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.tan(val)));
+              setHistory(prev => [`tan(${formatNumber(val)}) = ${Math.tan(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>tan</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.sinh(val)));
+              setHistory(prev => [`sinh(${formatNumber(val)}) = ${Math.sinh(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>sinh</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.cosh(val)));
+              setHistory(prev => [`cosh(${formatNumber(val)}) = ${Math.cosh(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>cosh</Button>
+            <Button variant="ib" size="small" onClick={() => {
+              const val = parseFloat(display);
+              setDisplay(String(Math.tanh(val)));
+              setHistory(prev => [`tanh(${formatNumber(val)}) = ${Math.tanh(val).toFixed(6)}`, ...prev.slice(0, 19)]);
+              setWaitingForOperand(true);
+            }}>tanh</Button>
+          </div>
         </div>
       )}
 
@@ -537,7 +857,7 @@ const IBCtool = () => {
         </div>
       )}
 
-      {/* Basic Calculator Layout - Optimized button grid for mobile */}
+      {/* Basic Calculator Layout */}
       <div className="space-y-2 md:space-y-3">
         <div className="grid grid-cols-4 gap-1 md:gap-3">
           <Button variant="clear" onClick={clear}>AC</Button>
@@ -602,7 +922,7 @@ const IBCtool = () => {
         </div>
       </div>
 
-      {/* Footer - Compact for mobile */}
+      {/* Footer */}
       <div className={`text-xs mt-3 md:mt-6 text-center transition-all duration-300 ${
         isDarkMode ? 'text-gray-400' : 'text-gray-600'
       }`}>
